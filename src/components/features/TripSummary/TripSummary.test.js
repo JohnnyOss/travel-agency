@@ -6,15 +6,15 @@ describe('Component TripSummary', () => {
 
   it('should render correct link', () => {
     const exceptedLink = '/trip/abc';
-    const component = shallow(<TripSummary id='abc' />);
+    const component = shallow(<TripSummary id='abc' image='' name='' cost='' days={1} tags={[]} />);
     const renderedLink = component.find('.link').prop('to');
     expect(renderedLink).toEqual(exceptedLink);
   });
 
-  it('should render correct src and alt for img', () => {
+  it('should render correct sr and alt for img', () => {
     const expectedImage = 'image.jpg';
     const expectedAlt = 'name';
-    const component = shallow(<TripSummary image={expectedImage} name={expectedAlt} />);
+    const component = shallow(<TripSummary id='' cost='' days={1} tags={[]} image={expectedImage} name={expectedAlt} />);
 
     expect(component.find('img').prop('src')).toEqual(expectedImage);
     expect(component.find('img').prop('alt')).toEqual(expectedAlt);
@@ -24,7 +24,7 @@ describe('Component TripSummary', () => {
     const expectedCost = '1000';
     const expectedName = 'name';
     const expectedDays = 3;
-    const component = shallow(<TripSummary days={expectedDays} name={expectedName} cost={expectedCost}/>);
+    const component = shallow(<TripSummary id='' image='' tags={[]} days={expectedDays} name={expectedName} cost={expectedCost}/>);
 
     expect(component).toBeTruthy();
   });
