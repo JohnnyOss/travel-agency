@@ -11,31 +11,39 @@ import {calculateTotal} from '../../../utils/calculateTotal';
 
 import {Grid, Row, Col} from 'react-flexbox-grid';
 
-const sendOrder = (options, tripCost) => {
+const sendOrder = (options, tripCost, tripName, tripId, countryCode) => {
   const totalCost = formatPrice(calculateTotal(tripCost, options));
 
   const payload = {
     ...options,
     totalCost,
+    tripName,
+    tripId,
+    countryCode,
   };
 
-  const url = settings.db.url + '/' + settings.db.endpoint.orders;
+  if (options.name !='' && options.contact != '') {
 
-  const fetchOptions = {
-    cache: 'no-cache',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  };
+    const url = settings.db.url + '/' + settings.db.endpoint.orders;
 
-  fetch(url, fetchOptions)
-    .then(function(response){
-      return response.json();
-    }).then(function(parsedResponse){
-      console.log('parsedResponse', parsedResponse);
-    });
+    const fetchOptions = {
+      cache: 'no-cache',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    };
+
+    fetch(url, fetchOptions)
+      .then(function(response){
+        return response.json();
+      }).then(function(parsedResponse){
+        console.log('parsedResponse', parsedResponse);
+      });
+  } else {
+    alert('Please fill your name and contact');
+  }
 };
 
 class OrderForm extends React.Component {
@@ -45,10 +53,13 @@ class OrderForm extends React.Component {
     options: PropTypes.object,
     pricing: PropTypes.array,
     setOrderOption: PropTypes.func,
+    tripName: PropTypes.string,
+    tripId: PropTypes.string,
+    countryCode: PropTypes.string,
   }
 
   render() {
-    const { tripCost, options, setOrderOption} = this.props;
+    const { tripCost, options, setOrderOption, tripName, tripId, countryCode} = this.props;
     return(
       <Grid>
         <Row>
@@ -59,7 +70,7 @@ class OrderForm extends React.Component {
           )}
           <Col xs={12}>
             <OrderSummary tripCost={tripCost} options={options} />
-            <Button onClick={() => sendOrder(options, tripCost)}>Order now!</Button>
+            <Button onClick={() => sendOrder(options, tripCost, tripName, tripId, countryCode)}>Order now!</Button>
           </Col>
         </Row>
       </Grid>
